@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('habitacions', function (Blueprint $table) {
+        Schema::create('habitaciones', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('hotel_id')->constrained('hoteles')->onDelete('cascade');
+            $table->string('tipo'); // Estándar, Junior, Suite
+            $table->string('acomodacion'); // Sencilla, Doble, etc.
+            $table->integer('cantidad');
             $table->timestamps();
         });
     }
