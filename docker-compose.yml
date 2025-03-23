@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./app-backend
+      dockerfile: Dockerfile
+    container_name: app-backend
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+       - ./app-backend:/var/www
+    ports:
+      - "9000:9000"
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./app-backend:/var/www
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "85:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: prueba_hoteles
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pgdata:
