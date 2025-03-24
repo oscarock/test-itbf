@@ -35,6 +35,8 @@ services:
     container_name: app-frontend
     ports:
       - "3000:3000"
+    volumes:
+      - ./app-frontend:/app
     networks:
       - app-network
     depends_on:
