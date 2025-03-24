@@ -28,6 +28,18 @@ services:
     networks:
       - app-network
 
+  frontend:
+    build:
+      context: ./app-frontend
+      dockerfile: Dockerfile
+    container_name: app-frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
   db:
     image: postgres:15
     container_name: postgres_db
